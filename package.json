@@ -1,0 +1,50 @@
+{
+  "name": "langchain-app",
+  "version": "1.0.0",
+  "description": "Langchain app using Google GenAI and TypeScript",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "tsx index.ts",
+    "build": "tsc",
+    "watch": "tsc -w",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "eslint \"src/**/*.ts\"",
+    "lint:fix": "eslint \"src/**/*.ts\" --fix",
+    "docker:dev": "docker-compose up node_app_dev",
+    "docker:down:dev": "docker-compose down node_app_dev",
+    "docker:dev:build": "docker-compose up --build node_app_dev",
+    "docker:dev:logs": "docker-compose logs -f node_app_dev",
+    "docker:dev:clean": "docker-compose down && docker network prune -f && docker volume prune -f",
+    "docker:up:dev": "docker-compose up -d redis postgres pgadmin evolution_v2",
+    "docker:up:prod": "docker-compose up -d redis postgres pgadmin evolution_v2 node_app",
+    "docker:networks": "docker network ls"
+  },
+  "dependencies": {
+    "@langchain/core": "^0.3.54",
+    "@langchain/google-genai": "^0.2.6",
+    "@langchain/langgraph": "^0.2.68",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.3",
+    "pino": "^8.19.0",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.11.24",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.0.0",
+    "prettier": "^3.0.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.4",
+    "typescript": "^5.4.0"
+  },
+  "engines": {
+    "node": ">=22.3.0"
+  }
+}
