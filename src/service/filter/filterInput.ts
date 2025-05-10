@@ -5,7 +5,6 @@ import { pino } from 'pino';
 const logger = pino({ level: 'debug' });
 
 const ALLOWED_NUMBER = process.env.SENDER_ID;
-// const ALLOWED_SENDER_NAME = process.env.SENDRER_NAME;
 
 if (!ALLOWED_NUMBER) {
   throw new Error('SENDER_ID environment variable is not defined');

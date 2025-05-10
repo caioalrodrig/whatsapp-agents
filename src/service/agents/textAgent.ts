@@ -1,4 +1,4 @@
-import { callAI } from "../AI-nodes/startNode.js";
+import { textNode } from "../AI-nodes/startNode.js";
 import { AIMessage } from "@langchain/core/messages";
 import { MessagesAnnotation, START, END, StateGraph } from "@langchain/langgraph";
 
@@ -9,7 +9,7 @@ import { MessagesAnnotation, START, END, StateGraph } from "@langchain/langgraph
 
 export const createFlow = () => {
   return new StateGraph(MessagesAnnotation)
-    .addNode('model', callAI)
+    .addNode('model', textNode)
     .addEdge(START, 'model')
     .addEdge('model', END);
 };

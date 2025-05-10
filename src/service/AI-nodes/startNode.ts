@@ -19,7 +19,7 @@ const createModel = () =>
   ['human', '{messages}'],
 ]); */
 
-export const callAI = async (
+export const textNode = async (
   state: typeof MessagesAnnotation.State,
 ) => {
   /*   const template = createTemplate(); */
