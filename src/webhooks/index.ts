@@ -25,7 +25,7 @@ const processMessage = async (message: string) => {
 
 const webhook: RequestHandler = async (req, res) => {
   try {
-    const message = req.body?.data?.message.conversation;
+    const message = req.body.message;
 
     const response = await processMessage(message); 
 
