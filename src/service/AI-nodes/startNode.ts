@@ -1,13 +1,13 @@
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
+import { ChatGroq } from '@langchain/groq';
 import { MessagesAnnotation } from '@langchain/langgraph';
 
 const createModel = () =>
-  new ChatGoogleGenerativeAI({
-    model: 'gemini-1.5-flash',
-    temperature: 0,
+  new ChatGroq({
+    apiKey: process.env.GROQ_API_KEY,
+    model: 'meta-llama/llama-4-scout-17b-16e-instruct',
     maxRetries: 2,
-    maxOutputTokens: 2000,
-    apiKey: process.env.GEMINI_API_KEY,
+    temperature: 0,
   });
 
 /* const createTemplate = () => ChatPromptTemplate.fromMessages([
@@ -19,7 +19,7 @@ const createModel = () =>
   ['human', '{messages}'],
 ]); */
 
-export const processMessage = async (
+export const callAI = async (
   state: typeof MessagesAnnotation.State,
 ) => {
   /*   const template = createTemplate(); */

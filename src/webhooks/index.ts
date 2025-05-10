@@ -25,16 +25,12 @@ const processMessage = async (message: string) => {
 
 const webhook: RequestHandler = async (req, res) => {
   try {
-    res.status(200).json({ status: 'received' });
-
-    logger.info({ body: req.body, method: req.method }, 'Webhook recebido');
-
     const message = req.body?.data?.message.conversation;
-    if (message) {
-      const response = await processMessage(message); 
-      logger.info({ response }, 'Mensagem processada com sucesso'); 
-    }
-    
+
+    const response = await processMessage(message); 
+
+    logger.info({ response }, 'Mensagem processada com sucesso'); 
+
   } catch (error) {
     logger.error({ error }, 'Erro no webhook');
   }
