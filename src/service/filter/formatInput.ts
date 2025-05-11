@@ -8,7 +8,7 @@ export const formatInputData: RequestHandler = (req, res, next) => {
     const filteredData: MessageData = {
       phoneNumber: body.data.key.remoteJid.split('@')[0],
       sender: body.data.pushName,
-      message: body.data.message.conversation ?? undefined,
+      conversation: body.data.message.conversation ?? undefined,
       base64: body.data.message.audioMessage
         ? body.data.message.base64
         : undefined,
