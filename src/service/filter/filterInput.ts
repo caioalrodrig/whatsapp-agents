@@ -6,19 +6,11 @@ const logger = pino({ level: 'debug' });
 
 const ALLOWED_NUMBER = process.env.SENDER_ID;
 
-if (!ALLOWED_NUMBER) {
-  throw new Error('SENDER_ID environment variable is not defined');
-}
-
 export const filterInputData: RequestHandler = async (req, res, next) => {
   try {
-    res.status(200);
-
-    const msgPhoneNumber = req.body.phoneNumber;
-
-    if (String(msgPhoneNumber).includes(String(ALLOWED_NUMBER))) {
+    if (String(req.body.phoneNumber).includes(String(ALLOWED_NUMBER))) {
+      res.status(200);
       logger.info({ body: req.body, method: req.method }, 'Webhook recebido');
-
       next();
     }
 

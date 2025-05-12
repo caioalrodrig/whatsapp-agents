@@ -12,7 +12,7 @@ export const formatInputData: RequestHandler = (req, res, next) => {
       base64: body.data.message.audioMessage
         ? body.data.message.base64
         : undefined,
-      dateTime: new Date(),
+      timestamp: new Date(),
     };
 
     req.body = filteredData;

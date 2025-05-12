@@ -17,9 +17,9 @@
     "docker:app:build": "docker-compose up --build node_app_dev",
     "docker:app:logs": "docker-compose logs -f node_app_dev",
     "docker:clean": "docker-compose down && docker network prune -f && docker volume prune -f",
-    "docker:up": "docker-compose up -d redis postgres pgadmin evolution_v2",
-    "docker:down": "docker-compose down redis postgres pgadmin evolution_v2 node_app_dev",
-    "docker:up:prod": "docker-compose up -d redis postgres pgadmin evolution_v2 node_app",
+    "docker:up": "docker-compose up -d redis postgres pgadmin evolution_v2 redis_app",
+    "docker:down": "docker-compose down redis postgres pgadmin evolution_v2 redis_app node_app_dev ",
+    "docker:up:prod": "docker-compose up -d redis postgres pgadmin evolution_v2 redis_app node_app",
     "docker:networks": "docker network ls"
   },
   "dependencies": {
@@ -30,6 +30,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.18.3",
+    "ioredis": "^5.6.1",
     "openai": "^4.98.0",
     "pino": "^8.19.0",
     "uuid": "^9.0.1"
