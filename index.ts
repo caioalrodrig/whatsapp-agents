@@ -1,25 +1,24 @@
-import dotenv from 'dotenv';
-import { pino } from 'pino';
-import { server } from './src/server.js';
-import { redisClient } from './src/shared/config/redis.js';
+import 'dotenv/config';
+import { Server } from './src/Server.js';
+import { RedisClient } from './src/core/RedisClient.js';
 
-dotenv.config();
+async function bootstrap() {
+  try {
+    const server = new Server();
+    const redisClient = RedisClient.getInstance();
+    
+    await redisClient.connect();
+    
+    const app = server.getApp();
+    const port = process.env.PORT || 3000;
+    
+    app.listen(port, () => {
+      console.log(`Servidor rodando na porta ${port}`);
+    });
+  } catch (error) {
+    console.error('Erro ao iniciar o servidor:', error);
+    process.exit(1);
+  }
+}
 
-const port = Number(process.env.PORT) || 3000;
-const logger = pino({ level: 'debug' });
-
-const startServer = () => {
-  server.listen(port, () => {
-    logger.info(`Servidor rodando em http://localhost:${port}`);
-  });
-};
-
-redisClient.on('connect', () => {
-  logger.info('Redis conectado com sucesso');
-  startServer();
-});
-
-redisClient.on('error', (err) => {
-  logger.error('Erro ao conectar com Redis:', err);
-});
-
+bootstrap();

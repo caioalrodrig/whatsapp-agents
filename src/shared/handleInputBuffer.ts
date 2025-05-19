@@ -1,8 +1,10 @@
-import { redisClient } from './config/redis';
+import { RedisClient } from '../core/RedisClient.js';
+import { Logger } from '../core/config/Logger.js';
+import { MessageData } from '../models/MessageData.js';
 import { pino } from 'pino';
-import { MessageData } from '../types/MessageData';
 
-const logger = pino({ level: 'debug' });
+const logger = Logger.getInstance();
+const redisClient = RedisClient.getInstance();
 
 const redisKeysWrapper = (phoneNumber: string) => ({
   messages: `buffer:${phoneNumber}:messages`,
@@ -56,7 +58,7 @@ export const isBufferComplete = async (
 
     return false;
   } catch (error) {
-    logger.error(
+    logger.getLogger().error(
       { error, phoneNumber: phoneNumber },
       'Erro ao processar buffer',
     );
