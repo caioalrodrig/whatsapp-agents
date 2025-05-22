@@ -4,20 +4,22 @@ import { MessageData } from '../models/MessageData.js';
 import { MessageService } from './WhatsApp/MessageService.js';
 import { MainAgent } from '../ai-agents/MainAgent.js';
 import { HumanMessage, MessageContent } from '@langchain/core/messages';
-import { transcriptAudio } from '../shared/transcriptAudio.js';
+import { AudioTranscript } from '../shared/AudioTranscript.js';
 
 export class WebhookService {
   private logger: ReturnType<typeof Logger.getInstance>;
   private messageService: MessageService;
   private mainAgent: MainAgent;
+  private audioTranscript: AudioTranscript;
 
   constructor() {
     this.logger = Logger.getInstance();
     this.messageService = new MessageService();
     this.mainAgent = MainAgent.getInstance();
+    this.audioTranscript = new AudioTranscript();
   }
 
-  private async processMessage(message: string): Promise<MessageContent> {
+  private async callAIAgent(message: string): Promise<MessageContent> {
     try {
       const flow = this.mainAgent.createFlow();
       const output = await flow.compile().invoke({
@@ -36,10 +38,10 @@ export class WebhookService {
     try {
       const inputData: MessageData = req.body;
       const message = inputData.base64
-        ? await transcriptAudio(inputData.base64)
+        ? await this.audioTranscript.transcript(inputData.base64)
         : inputData.conversation;
 
-      const response = await this.processMessage(message);
+      const response = await this.callAIAgent(message);
       
       if (response) {
         await this.messageService.sendMessage(inputData, response.toString());
@@ -48,7 +50,6 @@ export class WebhookService {
       this.logger.getLogger().info({ response }, 'Fluxo completo');
     } catch (error) {
       this.logger.getLogger().error({ error }, 'Erro no webhook');
-
     }
   }
 } 

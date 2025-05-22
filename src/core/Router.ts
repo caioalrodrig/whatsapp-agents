@@ -40,7 +40,6 @@ export class Router {
       (req, res) => this.webhookController.handleWebhook(req, res)
     );
 
-    // Rota de teste para verificar se o servidor está funcionando
     this.router.get('/health', (req, res) => {
       res.status(200).json({ status: 'ok' });
     });
