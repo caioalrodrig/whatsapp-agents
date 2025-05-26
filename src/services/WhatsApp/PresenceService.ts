@@ -1,4 +1,4 @@
-import { MessageData } from '../../models/MessageData.js';
+import { MessageData } from '../../core/models/MessageData.js';
 import { WhatsAppService } from './WhatsAppService.js';
 
 export class PresenceService extends WhatsAppService {

@@ -2,7 +2,7 @@ import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
 import OpenAI from 'openai';
-import { Logger } from '../core/config/Logger.js';
+import { Logger } from '../../core/config/Logger.js';
 
 export class AudioTranscript {
   private readonly openai: OpenAI;

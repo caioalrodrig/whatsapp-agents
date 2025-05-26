@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { MessageData } from '../../models/MessageData.js';
+import { MessageData } from '../../core/models/MessageData.js';
 import { BaseFilter } from './BaseFilter.js';
 
 export class FormatInputFilter extends BaseFilter {

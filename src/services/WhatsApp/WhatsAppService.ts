@@ -1,4 +1,4 @@
-import { MessageData } from '../../models/MessageData.js';
+import { MessageData } from '../../core/models/MessageData.js';
 import { Logger } from '../../core/config/Logger.js';
 import { Environment } from '../../core/config/Environment.js';
 

@@ -3,7 +3,7 @@ import { Logger } from './config/Logger.js';
 
 export class RedisClient {
   private static instance: RedisClient;
-  private client: Redis;
+  public client: Redis;
   private logger: ReturnType<typeof Logger.getInstance>;
 
   private constructor() {

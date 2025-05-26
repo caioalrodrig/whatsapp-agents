@@ -1,28 +1,29 @@
 import { Request, Response } from 'express';
 import { Logger } from '../core/config/Logger.js';
-import { MessageData } from '../models/MessageData.js';
+import { MessageData } from '../core/models/MessageData.js';
 import { MessageService } from './WhatsApp/MessageService.js';
 import { MainAgent } from '../ai-agents/MainAgent.js';
 import { HumanMessage, MessageContent } from '@langchain/core/messages';
-import { AudioTranscript } from '../shared/AudioTranscript.js';
+import { AudioTranscript } from './shared/AudioTranscript.js';
 
 export class WebhookService {
   private logger: ReturnType<typeof Logger.getInstance>;
   private messageService: MessageService;
-  private mainAgent: MainAgent;
   private audioTranscript: AudioTranscript;
 
   constructor() {
     this.logger = Logger.getInstance();
     this.messageService = new MessageService();
-    this.mainAgent = MainAgent.getInstance();
     this.audioTranscript = new AudioTranscript();
   }
 
-  private async callAIAgent(message: string): Promise<MessageContent> {
+  private async callAIAgent(inputData: MessageData): Promise<MessageContent> {
     try {
-      const flow = this.mainAgent.createFlow();
-      const output = await flow.compile().invoke({
+      const mainAgent = new MainAgent(inputData.phoneNumber);
+
+      const message = await this.handleMessage(inputData);
+
+      const output = await mainAgent.createFlow().invoke({
         messages: [new HumanMessage(message)],
       });
 
@@ -37,19 +38,28 @@ export class WebhookService {
   public async handleWebhook(req: Request, res: Response): Promise<void> {
     try {
       const inputData: MessageData = req.body;
-      const message = inputData.base64
-        ? await this.audioTranscript.transcript(inputData.base64)
-        : inputData.conversation;
 
-      const response = await this.callAIAgent(message);
-      
+      const response = await this.callAIAgent(inputData);
+
       if (response) {
         await this.messageService.sendMessage(inputData, response.toString());
       }
 
-      this.logger.getLogger().info({ response }, 'Fluxo completo');
+      this.logger.getLogger().info(
+        {
+          response,
+          threadId: inputData.phoneNumber,
+        },
+        'Fluxo completo',
+      );
     } catch (error) {
       this.logger.getLogger().error({ error }, 'Erro no webhook');
     }
   }
-} 
+
+  private async handleMessage(inputData: MessageData): Promise<string> {
+    return inputData.base64
+      ? await this.audioTranscript.transcript(inputData.base64)
+      : inputData.conversation;
+  }
+}
