@@ -12,10 +12,20 @@ export class InputFilter extends BaseFilter {
     this.ALLOWED_NUMBER = process.env.SENDER_ID ?? '';
   }
 
-  public async handle(req: Request, res: Response, next: NextFunction): Promise<void> {
-    if (String(req.body.phoneNumber).includes(String(this.ALLOWED_NUMBER))) {
+  public async handle(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    const fromMe = req.body.fromMe as boolean;
+    if (
+      String(req.body.phoneNumber).includes(String(this.ALLOWED_NUMBER)) &&
+      !fromMe
+    ) {
       res.status(200);
-      this.logger.getLogger().info({ body: req.body, method: req.method }, 'Webhook recebido');
+      this.logger
+        .getLogger()
+        .info({ body: req.body, method: req.method }, 'Webhook recebido');
       next();
       return;
     }
@@ -23,4 +33,4 @@ export class InputFilter extends BaseFilter {
     this.logger.getLogger().info('Webhook não autorizado');
     res.status(200).end();
   }
-} 
+}

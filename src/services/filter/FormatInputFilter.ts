@@ -5,8 +5,9 @@ import { BaseFilter } from './BaseFilter.js';
 export class FormatInputFilter extends BaseFilter {
   public async handle(req: Request, res: Response, next: NextFunction): Promise<void> {
     const { body } = req;
-
+    
     const filteredData: MessageData = {
+      fromMe: body.data.key.fromMe,
       phoneNumber: body.data.key.remoteJid,
       sender: body.data.pushName,
       conversation: body.data.message.conversation ?? undefined,
