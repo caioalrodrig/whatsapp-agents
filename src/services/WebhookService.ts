@@ -19,7 +19,7 @@ export class WebhookService {
 
   private async callAIAgent(inputData: MessageData): Promise<MessageContent> {
     try {
-      const mainAgent = new MainAgent(inputData.phoneNumber);
+      const mainAgent = new MainAgent(inputData);
 
       const message = await this.handleMessage(inputData);
 
