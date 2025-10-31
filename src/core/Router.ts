@@ -2,10 +2,10 @@ import { Router as ExpressRouter } from 'express';
 import express from 'express';
 import cors from 'cors';
 import { WebhookController } from './WebhookController.js';
-import { WebhookService } from '@/services/WebhookService.js';
-import { BufferInputFilter } from '@/services/filter/BufferInputFilter.js';
-import { InputFilter } from '@/services/filter/InputFilter.js';
-import { FormatInputFilter } from '@/services/filter/FormatInputFilter.js';
+import { WebhookService } from '../services/WebhookService.js';
+import { BufferInputFilter } from '../services/filter/BufferInputFilter.js';
+import { InputFilter } from '../services/filter/InputFilter.js';
+import { FormatInputFilter } from '../services/filter/FormatInputFilter.js';
 
 export class Router {
   private router: ExpressRouter;
