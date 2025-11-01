@@ -10,18 +10,24 @@ export class RedisClient {
     this.logger = Logger.getInstance();
     this.client = new Redis({
       port: 6380,
-      host: 'host.docker.internal',
+      host:
+        process.env.NODE_ENV === 'production'
+          ? 'redis_app'
+          : 'host.docker.internal',
       maxRetriesPerRequest: null,
       retryStrategy: (times) => {
         const delay = Math.min(times * 500, 5000);
-        this.logger.getLogger().info(`Tentando reconectar ao Redis. Tentativa ${times}`);
+        this.logger
+          .getLogger()
+          .info(`Tentando reconectar ao Redis. Tentativa ${times}`);
         return delay;
       },
-    
     });
-    
+
     this.client.on('error', (err: Error) => {
-      this.logger.getLogger().error({ error: err }, 'Erro na conexão com Redis');
+      this.logger
+        .getLogger()
+        .error({ error: err }, 'Erro na conexão com Redis');
     });
 
     this.client.on('connect', () => {
@@ -53,7 +59,9 @@ export class RedisClient {
         await this.client.set(key, value);
       }
     } catch (error) {
-      this.logger.getLogger().error({ error }, 'Erro ao definir valor no Redis');
+      this.logger
+        .getLogger()
+        .error({ error }, 'Erro ao definir valor no Redis');
       throw error;
     }
   }
@@ -71,7 +79,9 @@ export class RedisClient {
     try {
       await this.client.del(key);
     } catch (error) {
-      this.logger.getLogger().error({ error }, 'Erro ao deletar chave do Redis');
+      this.logger
+        .getLogger()
+        .error({ error }, 'Erro ao deletar chave do Redis');
       throw error;
     }
   }
@@ -80,7 +90,9 @@ export class RedisClient {
     try {
       await this.client.quit();
     } catch (error) {
-      this.logger.getLogger().error({ error }, 'Erro ao fechar conexão com Redis');
+      this.logger
+        .getLogger()
+        .error({ error }, 'Erro ao fechar conexão com Redis');
       throw error;
     }
   }
@@ -89,7 +101,9 @@ export class RedisClient {
     try {
       return await this.client.rpush(key, value);
     } catch (error) {
-      this.logger.getLogger().error({ error }, 'Erro ao adicionar valor à lista no Redis');
+      this.logger
+        .getLogger()
+        .error({ error }, 'Erro ao adicionar valor à lista no Redis');
       throw error;
     }
   }
@@ -98,17 +112,25 @@ export class RedisClient {
     try {
       return await this.client.llen(key);
     } catch (error) {
-      this.logger.getLogger().error({ error }, 'Erro ao obter tamanho da lista no Redis');
+      this.logger
+        .getLogger()
+        .error({ error }, 'Erro ao obter tamanho da lista no Redis');
       throw error;
     }
   }
 
-  public async lrange(key: string, start: number, stop: number): Promise<string[]> {
+  public async lrange(
+    key: string,
+    start: number,
+    stop: number,
+  ): Promise<string[]> {
     try {
       return await this.client.lrange(key, start, stop);
     } catch (error) {
-      this.logger.getLogger().error({ error }, 'Erro ao obter valores da lista no Redis');
+      this.logger
+        .getLogger()
+        .error({ error }, 'Erro ao obter valores da lista no Redis');
       throw error;
     }
   }
-} 
+}

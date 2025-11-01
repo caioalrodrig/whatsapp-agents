@@ -28,7 +28,8 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql
+
     restart: always
     deploy:
       resources:
@@ -43,8 +44,8 @@ services:
     image: dpage/pgadmin4:latest
     container_name: pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: 12345
+      PGADMIN_DEFAULT_EMAIL: default@email.com
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
     ports:
       - "5433:80"
     restart: always
@@ -58,26 +59,19 @@ services:
 
   # Serviço Node.js
   node_app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: docker.io/caioalrodrig/bots:latest
     container_name: node_app
     ports:
       - "3000:3000"
-    environment:
-      - NODE_ENV=production
-      - PORT=3000
-    volumes:
-      - .:/app
-      - /app/node_modules
-      - /app/dist
+    env_file:
+      - .env
+
     depends_on:
       - redis
       - postgres
     restart: always
     networks:
       - app_network
-    command: sh -c "npm run build && node dist/index.js"
 
   # Serviço Node.js (Desenvolvimento)  
   node_app_dev:
@@ -99,6 +93,8 @@ services:
     depends_on:
       - redis_app
     command: npm run dev
+    profiles:
+      - dev
 
   # Serviço Evolution API
   evolution_v2:
