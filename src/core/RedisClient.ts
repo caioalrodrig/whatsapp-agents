@@ -1,4 +1,4 @@
-import { Redis } from 'ioredis';
+import { Redis, RedisOptions } from 'ioredis';
 import { Logger } from './config/Logger.js';
 
 export class RedisClient {
@@ -8,21 +8,26 @@ export class RedisClient {
 
   private constructor() {
     this.logger = Logger.getInstance();
-    this.client = new Redis({
-      port: 6380,
+    const redisOptions: RedisOptions = {
       host:
         process.env.NODE_ENV === 'production'
-          ? 'redis_app'
+          ? 'redis'
           : 'host.docker.internal',
+      port: process.env.NODE_ENV === 'production' ? 6379 : 6380,
       maxRetriesPerRequest: null,
-      retryStrategy: (times) => {
-        const delay = Math.min(times * 500, 5000);
+      retryStrategy: (times: number) => {
         this.logger
           .getLogger()
           .info(`Tentando reconectar ao Redis. Tentativa ${times}`);
-        return delay;
+        return Math.min(times * 500, 5000);
       },
-    });
+    };
+
+    if (process.env.NODE_ENV === 'production') {
+      redisOptions.password = process.env.REDIS_PASSWORD;
+    }
+
+    this.client = new Redis(redisOptions);
 
     this.client.on('error', (err: Error) => {
       this.logger
