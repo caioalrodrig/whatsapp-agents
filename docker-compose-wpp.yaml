@@ -168,11 +168,9 @@ services:
 
   cloudflared:
     image: cloudflare/cloudflared:latest
-    container_name: cf_tunnel
-    restart: unless-stopped
-    command: tunnel --config /etc/cloudflared/config.yml run meu-tunel
-    volumes:
-      - /home/rodrigscaio/.cloudflared:/etc/cloudflared:ro
+    restart: always
+    container_name: cloudflared
+    command: tunnel run --token ${TUNNEL_TOKEN}
     depends_on:
       - evolution_v2
     networks:

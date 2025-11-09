@@ -5,3 +5,15 @@ npm-debug.log
 .env.local
 .env.*.local 
 temp/
+# --- TERRAFORM ---
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+
+plan.out
+
+# Internal cache and providers directory
+.terraform/
+.terraform.lock.hcl.backup
+infra/terraform.tfvars
