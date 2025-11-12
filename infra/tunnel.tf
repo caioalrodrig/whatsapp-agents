@@ -11,7 +11,7 @@ data "cloudflare_zero_trust_tunnel_cloudflared_token" "win_tunnel" {
   tunnel_id   = cloudflare_zero_trust_tunnel_cloudflared.win_tunnel.id
 }
 
-# Creates the CNAME record that routes kyle.${var.cloudflare_zone} to the tunnel.
+# Creates the CNAME record that routes win_tunnel.${var.cloudflare_zone} to the tunnel.
 resource "cloudflare_dns_record" "evo2" {
   zone_id = var.cloudflare_zone_id
   name    = "evo2"
