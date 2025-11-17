@@ -2,6 +2,7 @@
 
 The [Cloudflare Terraform provider](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs) provides convenient access to the [Cloudflare REST API](https://developers.cloudflare.com/api) from Terraform.
 
+
 ## Requirements
 
 This provider requires Terraform CLI version 1.0 or later. You can [install it for your system](https://developer.hashicorp.com/terraform/install) from Hashicorp's website.
@@ -65,25 +66,6 @@ Setting up a tunnel requires some preliminary steps:
       - <YOUR_TUNNELED_SERVICE>
 ```
 
-Setting up a tunnel requires some preliminary steps:
-
-- Enable a domain on the Cloudflare registry (acquire or transfer one).
-- Adapt the `tunnel.tf` file to your context and run the code that performs the following steps:
-  - Add a tunnel to your account.
-  - Bind the tunnel to a DNS subdomain.
-  - Configure the Docker network ingress rules (e.g., service name and ports).
-- Create a Cloudflared Docker service to manage the tunnel:
-
-```hcl
-  cloudflared:
-    image: cloudflare/cloudflared:latest
-    restart: always
-    container_name: cloudflared
-    command: tunnel run --token ${TUNNEL_TOKEN}
-    depends_on:
-      - <YOUR_TUNNELED_SERVICE>
-```
-
 Finally, to authenticate the tunnel when it starts, you must create a tunnel token and add it to your `.env` file.
 To create a new token, run the following command in your terminal:
 
@@ -105,13 +87,3 @@ In a nutshell the following is accomplished with this config:
 - GitHub IDP	Authenticates users through GitHub OAuth2
 - Access Policy	Defines who is allowed based on email/domain
 - Access Application	Binds the above resources to a specific app and domain
-
-
-
-
-
-
-
-
-
-
