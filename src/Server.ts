@@ -37,7 +37,7 @@ export class Server {
   private configureErrorHandling(): void {
     this.app.use(
       (err: any, req: Request, res: Response, next: NextFunction) => {
-        this.logger.getLogger().error({ error: err }, 'Erro no servidor');
+        this.logger.getLogger().error({ err }, 'Erro no servidor');
         res.status(500).json({
           status: 'error',
           message: 'Erro interno do servidor',

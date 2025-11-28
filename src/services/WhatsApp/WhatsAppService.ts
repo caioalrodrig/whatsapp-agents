@@ -16,6 +16,15 @@ export abstract class WhatsAppService {
   }
 
   protected async makeRequest(endpoint: string, body: any): Promise<any> {
+    const url = `${this.BASE_URL}${endpoint}`;
+    
+    this.logger.getLogger().debug({ 
+      url, 
+      body, 
+      hasApiKey: !!this.API_KEY,
+      hasBaseUrl: !!this.BASE_URL 
+    }, '🔍 Debug requisição WhatsApp');
+
     try {
       const options = {
         method: 'POST',
@@ -26,11 +35,11 @@ export abstract class WhatsAppService {
         body: JSON.stringify(body)
       };
 
-      const response = await fetch(`${this.BASE_URL}${endpoint}`, options);
+      const response = await fetch(url, options);
       return await response.json();
-    } catch (error) {
-      this.logger.getLogger().error({ error }, 'Erro na requisição WhatsApp');
-      throw error;
+    } catch (err) {
+      this.logger.getLogger().error({ err }, 'Erro na requisição WhatsApp');
+      throw err;
     }
   }
 } 

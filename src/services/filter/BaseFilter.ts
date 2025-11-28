@@ -13,9 +13,9 @@ export abstract class BaseFilter {
   public async execute(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       await this.handle(req, res, next);
-    } catch (error) {
-      this.logger.getLogger().error({ error }, 'Erro no filtro');
-      next(error);
+    } catch (err) {
+      this.logger.getLogger().error({ err }, 'Erro no filtro');
+      next(err);
     }
   }
 } 

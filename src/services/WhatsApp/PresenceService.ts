@@ -17,9 +17,9 @@ export class PresenceService extends WhatsAppService {
         delay: delay,
         presence: 'composing'
       });
-    } catch (error) {
-      this.logger.getLogger().error({ error }, 'Erro ao enviar presença');
-      throw error;
+    } catch (err) {
+      this.logger.getLogger().error({ err }, 'Erro ao enviar presença');
+      throw err;
     }
   }
 } 

@@ -15,8 +15,8 @@ export class WebhookController {
     try {
       this.logger.info({ body: req.body }, 'Webhook recebido');
       await this.webhookService.handleWebhook(req, res);
-    } catch (error) {
-      this.logger.error({ error }, 'Erro ao processar webhook');
+    } catch (err) {
+      this.logger.error({ err }, 'Erro ao processar webhook');
     }
   }
 } 

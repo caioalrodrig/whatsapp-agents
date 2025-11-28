@@ -60,9 +60,9 @@ export class BufferInputFilter extends BaseFilter {
       }
 
       return false;
-    } catch (error) {
+    } catch (err) {
       this.logger.getLogger().error(
-        { error, phoneNumber },
+        { err, phoneNumber },
         'Erro ao processar buffer',
       );
     }
